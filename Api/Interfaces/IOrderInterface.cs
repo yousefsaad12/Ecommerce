@@ -12,7 +12,7 @@ namespace Api.Interfaces
         Task<Order?> DeleteOrder(int orderId);
         Task<Order?> GetOrder(int orderId);
         Task<List<Order>> GetOrders();
-        Task<Order> UpdateOrder(Order order, int orderItemid);
+        Task<Order?> UpdateOrder(OrderItem orderItemUpdeted, int prodId, int orderId);
 
     }
 }

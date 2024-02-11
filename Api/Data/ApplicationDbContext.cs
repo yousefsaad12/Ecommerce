@@ -4,14 +4,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.Models;
 using EcommerceApi.Models;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceApi.Data
 {
-    public class ApplicationDbContext : DbContext
+    public class ApplicationDbContext : IdentityDbContext<AppUser>
     {
+
       public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
-      public DbSet<User> Users { get; set; }
+      
+      public DbSet<Admin> Admins { get; set; }
+      public DbSet<AppUser> AppUser { get; set; }
       public DbSet<Product> Products { get; set; }
       public DbSet<Category> Categories { get; set; }
       public DbSet<Order> Orders { get; set; }
@@ -21,6 +26,11 @@ namespace EcommerceApi.Data
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {   
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.Entity<AppUser>().ToTable("Users");
+            modelBuilder.Entity<Admin>().ToTable("Admins");
+
             modelBuilder.Entity<OrderItem>(oi => oi.HasKey(oi => new{oi.OrderId, oi.ProductId}));  
 
             modelBuilder.Entity<OrderItem>()

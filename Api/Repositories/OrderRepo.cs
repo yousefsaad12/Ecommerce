@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Api.Interfaces;
 using EcommerceApi.Data;
 using EcommerceApi.Models;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
 namespace Api.Repositories
@@ -46,12 +47,23 @@ namespace Api.Repositories
 
         public async Task<List<Order>> GetOrders()
         {
-            return await _context.Orders.ToListAsync();
+            return await _context.Orders.Include(o => o.orderItems).ToListAsync();
         }
 
-        public Task<Order> UpdateOrder(Order order, int orderItemid)
+        public async Task<Order?> UpdateOrder(OrderItem orderItemUpdeted, int prodId, int orderId)
         {
-            throw new NotImplementedException();
+            Order ? order = await GetOrder(orderId);
+            OrderItem ? orderItem = order.orderItems.FirstOrDefault(o => o.ProductId == prodId);
+
+            if(orderItem == null)
+                return null;
+
+            orderItem.Quantity = orderItemUpdeted.Quantity;
+            orderItem.ProductId = orderItemUpdeted.ProductId;
+
+            await _context.SaveChangesAsync();
+
+            return order;
         }
     }
 }

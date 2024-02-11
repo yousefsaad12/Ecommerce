@@ -10,9 +10,9 @@ namespace Api.Models
     {
         public int WishlistId { get; set; }
         public int ProductId { get; set; }
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public Product Product { get; set; }
-        public User User { get; set; }
+        public AppUser User { get; set; }
 
     }
 }
