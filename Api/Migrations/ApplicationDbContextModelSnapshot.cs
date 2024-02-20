@@ -22,58 +22,6 @@ namespace Apis.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
-            modelBuilder.Entity("Api.Models.Admin", b =>
-                {
-                    b.Property<string>("Id")
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<int>("AccessFailedCount")
-                        .HasColumnType("int");
-
-                    b.Property<string>("ConcurrencyStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("EmailConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<bool>("LockoutEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<DateTimeOffset?>("LockoutEnd")
-                        .HasColumnType("datetimeoffset");
-
-                    b.Property<string>("NormalizedEmail")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("NormalizedUserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PasswordHash")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("PhoneNumberConfirmed")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("SecurityStamp")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("TwoFactorEnabled")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Admins", (string)null);
-                });
-
             modelBuilder.Entity("Api.Models.Wishlist", b =>
                 {
                     b.Property<string>("UserId")
@@ -99,10 +47,6 @@ namespace Apis.Migrations
 
                     b.Property<int>("AccessFailedCount")
                         .HasColumnType("int");
-
-                    b.Property<string>("Address")
-                        .IsRequired()
-                        .HasColumnType("varchar(300)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
@@ -158,7 +102,9 @@ namespace Apis.Migrations
                         .HasDatabaseName("UserNameIndex")
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
-                    b.ToTable("Users", (string)null);
+                    b.ToTable("AppUser", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("EcommerceApi.Models.Category", b =>
@@ -391,6 +337,24 @@ namespace Apis.Migrations
                     b.ToTable("AspNetUserTokens", (string)null);
                 });
 
+            modelBuilder.Entity("Api.Models.Admin", b =>
+                {
+                    b.HasBaseType("EcommerceApi.Models.AppUser");
+
+                    b.ToTable("Admin", (string)null);
+                });
+
+            modelBuilder.Entity("Api.Models.User", b =>
+                {
+                    b.HasBaseType("EcommerceApi.Models.AppUser");
+
+                    b.Property<string>("Address")
+                        .IsRequired()
+                        .HasColumnType("varchar(300)");
+
+                    b.ToTable("User", (string)null);
+                });
+
             modelBuilder.Entity("Api.Models.Wishlist", b =>
                 {
                     b.HasOne("EcommerceApi.Models.Product", "Product")
@@ -399,7 +363,7 @@ namespace Apis.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("EcommerceApi.Models.AppUser", "User")
+                    b.HasOne("Api.Models.User", "User")
                         .WithMany("Wishlist")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -412,7 +376,7 @@ namespace Apis.Migrations
 
             modelBuilder.Entity("EcommerceApi.Models.Order", b =>
                 {
-                    b.HasOne("EcommerceApi.Models.AppUser", "User")
+                    b.HasOne("Api.Models.User", "User")
                         .WithMany("Orders")
                         .HasForeignKey("UserId1")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -502,11 +466,22 @@ namespace Apis.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("EcommerceApi.Models.AppUser", b =>
+            modelBuilder.Entity("Api.Models.Admin", b =>
                 {
-                    b.Navigation("Orders");
+                    b.HasOne("EcommerceApi.Models.AppUser", null)
+                        .WithOne()
+                        .HasForeignKey("Api.Models.Admin", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
 
-                    b.Navigation("Wishlist");
+            modelBuilder.Entity("Api.Models.User", b =>
+                {
+                    b.HasOne("EcommerceApi.Models.AppUser", null)
+                        .WithOne()
+                        .HasForeignKey("Api.Models.User", "Id")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("EcommerceApi.Models.Category", b =>
@@ -524,6 +499,13 @@ namespace Apis.Migrations
                     b.Navigation("OrderItems");
 
                     b.Navigation("Wishlists");
+                });
+
+            modelBuilder.Entity("Api.Models.User", b =>
+                {
+                    b.Navigation("Orders");
+
+                    b.Navigation("Wishlist");
                 });
 #pragma warning restore 612, 618
         }

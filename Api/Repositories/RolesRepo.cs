@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Identity;
 
 namespace api.Repository
 {
-    public class RolesRepo : IRolesRepo
+    public class RolesRepo : IRolesInterface
     {
         private readonly RoleManager<IdentityRole> _roleManager;
 

@@ -4,6 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Models;
 
 namespace EcommerceApi.Models
 {
@@ -16,7 +17,7 @@ namespace EcommerceApi.Models
         public DateTime OrderDT { get; set; }
 
         public int UserId { get; set; }
-        public AppUser User { get; set; }
+        public User User { get; set; }
 
         public decimal TotalPrice { get; set; }
         public ICollection<OrderItem> orderItems { get; set; }

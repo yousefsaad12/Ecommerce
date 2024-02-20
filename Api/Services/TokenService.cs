@@ -6,12 +6,13 @@ using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 using Api.Interfaces;
+using EcommerceApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Services
 {
-    public class TokenService : ITokenService
+    public class TokenService : ITokenInterface
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
@@ -21,13 +22,13 @@ namespace Api.Services
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));
 
         }
-        public string GenerateJwtToke<TUser>(TUser user, string role) where TUser : IdentityUser
+        public string GenerateJwtToke(AppUser user)
         {
            var claims = new List<Claim>
            {
                 new Claim(JwtRegisteredClaimNames.Email, user.Email),
                 new Claim(JwtRegisteredClaimNames.GivenName, user.UserName),
-                new Claim(ClaimTypes.Role,role)
+                new Claim(ClaimTypes.Role,"USER")
            };
 
            var creds = new SigningCredentials(_key, SecurityAlgorithms.HmacSha512Signature);

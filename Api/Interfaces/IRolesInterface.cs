@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace api.Interfaces
 {
-    public interface IRolesRepo
+    public interface IRolesInterface
     {
         public Task<bool>SeedingRoles();
     }

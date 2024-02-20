@@ -10,13 +10,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EcommerceApi.Data
 {
-    public class ApplicationDbContext : IdentityDbContext<AppUser>
+    public class ApplicationDbContext : IdentityDbContext<AppUser, IdentityRole , string>
     {
 
       public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) {}
       
-      public DbSet<Admin> Admins { get; set; }
+      
       public DbSet<AppUser> AppUser { get; set; }
+      public DbSet<User> User { get; set; }
+      public DbSet<Admin> Admin { get; set; }
       public DbSet<Product> Products { get; set; }
       public DbSet<Category> Categories { get; set; }
       public DbSet<Order> Orders { get; set; }
@@ -28,8 +30,10 @@ namespace EcommerceApi.Data
         {   
             base.OnModelCreating(modelBuilder);
 
-            modelBuilder.Entity<AppUser>().ToTable("Users");
-            modelBuilder.Entity<Admin>().ToTable("Admins");
+            modelBuilder.Entity<AppUser>().ToTable("AppUser");
+            modelBuilder.Entity<User>().ToTable("User");
+            modelBuilder.Entity<Admin>().ToTable("Admin");
+          
 
             modelBuilder.Entity<OrderItem>(oi => oi.HasKey(oi => new{oi.OrderId, oi.ProductId}));  
 
