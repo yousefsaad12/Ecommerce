@@ -22,6 +22,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<ICategoryInterface,CategoryRepo>();
 builder.Services.AddScoped<IOrderInterface,OrderRepo>();
+builder.Services.AddScoped<IOrderItemInterface,OrderItemRepo>();
 builder.Services.AddScoped<IProductInterface,ProductRepo>();
 builder.Services.AddScoped<IRolesInterface,RolesRepo>();
 builder.Services.AddScoped<ITokenInterface,TokenService>();

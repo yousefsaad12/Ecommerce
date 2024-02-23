@@ -16,10 +16,11 @@ namespace EcommerceApi.Models
         [Column(TypeName ="datetime")]
         public DateTime OrderDT { get; set; }
 
-        public int UserId { get; set; }
+        public string UserId { get; set; }
         public User User { get; set; }
 
         public decimal TotalPrice { get; set; }
         public ICollection<OrderItem> orderItems { get; set; }
+
     }
 }

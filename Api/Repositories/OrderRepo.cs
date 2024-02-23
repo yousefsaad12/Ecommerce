@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Dtos.OrderItemDTO;
 using Api.Interfaces;
 using EcommerceApi.Data;
 using EcommerceApi.Models;
@@ -19,11 +20,19 @@ namespace Api.Repositories
             
         }
 
-        public async Task<Order> CreateOrder(Order order)
+        public async Task<Order?> CreateOrder(string userId)
         {
-            await _context.AddAsync(order);
-            await _context.SaveChangesAsync();
 
+                var order = new Order
+            {
+                UserId = userId,
+                OrderDT = DateTime.Now,
+            };
+
+           await _context.Orders.AddAsync(order);
+          
+           await _context.SaveChangesAsync();
+        
             return order;
         }
 
@@ -48,6 +57,11 @@ namespace Api.Repositories
         public async Task<List<Order>> GetOrders()
         {
             return await _context.Orders.Include(o => o.orderItems).ToListAsync();
+        }
+
+        public decimal TotelOrderPrice(ICollection<OrderItem> orderItem)
+        {
+            throw new NotImplementedException();
         }
 
         public async Task<Order?> UpdateOrder(OrderItem orderItemUpdeted, int prodId, int orderId)

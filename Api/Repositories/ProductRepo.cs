@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Api.Dtos.OrderItemDTO;
 using Api.Interfaces;
 using EcommerceApi.Data;
 using EcommerceApi.Models;
@@ -23,6 +24,18 @@ namespace Api.Repositories
            await _context.AddAsync(prod);    
 
            return await _context.SaveChangesAsync() > 0 ? true : false;
+        }
+
+        public async Task<ICollection<Product>> GetProductsWithIds(ICollection<OrderItemAddDTO> orderItems)
+        {   
+            ICollection<Product> products = new List<Product>();
+
+            foreach(var orderitem in orderItems)
+            {
+                products.Add(await GetProductById(orderitem.ProductId));
+            }
+
+            return products;
         }
 
         public async Task<bool> DeleteProduct(int prodId)

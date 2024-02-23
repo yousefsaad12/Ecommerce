@@ -4,18 +4,27 @@ using Api.Mappers;
 using EcommerceApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authorization;
+using Api.Dtos.OrderItemDTO;
+using api.Extenstions;
 namespace Api.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     public class OrderController : ControllerBase
     {
         private readonly IOrderInterface _orderInterface;
+
+        private readonly IOrderItemInterface _orderItemInterface;
+        private readonly IProductInterface _productInterface;
         private readonly UserManager<AppUser> _userManager;
 
-        public OrderController(IOrderInterface orderInterface, UserManager<AppUser> userManager)
+        public OrderController(IOrderInterface orderInterface, UserManager<AppUser> userManager, IProductInterface productInterface, IOrderItemInterface orderItemInterface)
         {
             _orderInterface = orderInterface;
-             _userManager = userManager;
+            _userManager = userManager;
+            _productInterface = productInterface;
+            _orderItemInterface = orderItemInterface;
         }
 
 
@@ -29,12 +38,27 @@ namespace Api.Controllers
             
         }
 
-        [HttpPost("CreateOrder")]
-        public async Task<IActionResult>CreateOrder(OrderCreateDTO orderCreate)
+        [HttpPost("CreateOrder")] 
+        public async Task<IActionResult> CreateOrder(OrderItemAddDTO orderItemAddDTOs)
         {   
-            var user = await _userManager.FindByNameAsync(User.Identity.Name);
+            var username = User.GetUserName();
+            var user = await _userManager.FindByNameAsync(username);
 
-            return Ok("k");
+            var order = await _orderInterface.CreateOrder(user.Id);
+
+            if(order == null)
+                return BadRequest("Some Wrong happend");
+
+            var orderItem = await _orderItemInterface.CreateOrderItem(order.OrderId, orderItemAddDTOs);
+
+
+
+
+            return Ok(order);
+ 
         }
+
+
+
     }
 }

@@ -24,18 +24,24 @@ namespace Apis.Migrations
 
             modelBuilder.Entity("Api.Models.Wishlist", b =>
                 {
-                    b.Property<string>("UserId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("WishlistId")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("WishlistId"));
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<int>("WishlistId")
-                        .HasColumnType("int");
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
 
-                    b.HasKey("UserId", "ProductId");
+                    b.HasKey("WishlistId");
 
                     b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Wishlist");
                 });
@@ -138,16 +144,13 @@ namespace Apis.Migrations
                     b.Property<decimal>("TotalPrice")
                         .HasColumnType("decimal(18,2)");
 
-                    b.Property<int>("UserId")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserId1")
+                    b.Property<string>("UserId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("OrderId");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Orders");
                 });
@@ -159,9 +162,6 @@ namespace Apis.Migrations
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
-
-                    b.Property<decimal>("Price")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -358,7 +358,7 @@ namespace Apis.Migrations
             modelBuilder.Entity("Api.Models.Wishlist", b =>
                 {
                     b.HasOne("EcommerceApi.Models.Product", "Product")
-                        .WithMany("Wishlists")
+                        .WithMany()
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -378,7 +378,7 @@ namespace Apis.Migrations
                 {
                     b.HasOne("Api.Models.User", "User")
                         .WithMany("Orders")
-                        .HasForeignKey("UserId1")
+                        .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -394,7 +394,7 @@ namespace Apis.Migrations
                         .IsRequired();
 
                     b.HasOne("EcommerceApi.Models.Product", "Product")
-                        .WithMany("OrderItems")
+                        .WithMany("orderItems")
                         .HasForeignKey("ProductId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -496,9 +496,7 @@ namespace Apis.Migrations
 
             modelBuilder.Entity("EcommerceApi.Models.Product", b =>
                 {
-                    b.Navigation("OrderItems");
-
-                    b.Navigation("Wishlists");
+                    b.Navigation("orderItems");
                 });
 
             modelBuilder.Entity("Api.Models.User", b =>

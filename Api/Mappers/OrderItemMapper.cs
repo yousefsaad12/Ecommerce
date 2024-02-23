@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Api.Dtos.OrderItem;
+using Api.Dtos.OrderItemDTO;
 using EcommerceApi.Models;
 
 namespace Api.Mappers
@@ -13,8 +13,17 @@ namespace Api.Mappers
         {
             return new OrderItemResponseDTO ()
             {
-                Price = orderItem.Price,
+                
                 ProductName = orderItem.Product.Name,
+                Quantity = orderItem.Quantity
+            };
+        }
+
+        public static OrderItem ToOrderItem(this OrderItemAddDTO orderItem, Product product)
+        {
+            return new OrderItem ()
+            {
+                ProductId = product.ProductId,
                 Quantity = orderItem.Quantity
             };
         }

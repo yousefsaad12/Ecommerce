@@ -29,9 +29,7 @@ namespace EcommerceApi.Models
         public int CategoryId { get; set; }
         public Category ? Category { get; set; }
 
-        public ICollection <OrderItem> OrderItems { get; set; }
-
-        public ICollection<Wishlist> Wishlists { get; set; }
+         public ICollection<OrderItem> orderItems { get; set; }
 
     }
 }

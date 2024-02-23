@@ -2,12 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Api.Dtos.OrderItem;
 
 namespace Api.Dtos.OrderDTOS
 {
     public class OrderCreateDTO
     {
-         public ICollection<OrderItemAddDTO> orderItems { get; set; }
+        public int ProdId { get; set; }
+        public int Quantity { get; set; }
     }
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Dtos.OrderDTOS;
+using Api.Models;
 using EcommerceApi.Models;
 
 namespace Api.Mappers
@@ -15,8 +16,10 @@ namespace Api.Mappers
             {
                 OrderDT = order.OrderDT,
                 OrderId = order.OrderId,
-                orderItems = order.orderItems.Select(ot => ot.ToOrderItemResponseDTO())
+                orderItems = order.orderItems
             };
         }
+
+        
     }
 }

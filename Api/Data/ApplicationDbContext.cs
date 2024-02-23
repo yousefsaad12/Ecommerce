@@ -33,32 +33,21 @@ namespace EcommerceApi.Data
             modelBuilder.Entity<AppUser>().ToTable("AppUser");
             modelBuilder.Entity<User>().ToTable("User");
             modelBuilder.Entity<Admin>().ToTable("Admin");
-          
 
-            modelBuilder.Entity<OrderItem>(oi => oi.HasKey(oi => new{oi.OrderId, oi.ProductId}));  
 
+            modelBuilder.Entity<OrderItem>()
+                        .HasKey(oi => new {oi.OrderId, oi.ProductId});
+            
             modelBuilder.Entity<OrderItem>()
                         .HasOne(oi => oi.Order)
                         .WithMany(o => o.orderItems)
-                        .HasForeignKey(oi => oi.OrderId);
+                        .HasForeignKey(o => o.OrderId);
 
             modelBuilder.Entity<OrderItem>()
                         .HasOne(oi => oi.Product)
-                        .WithMany(p => p.OrderItems)
-                        .HasForeignKey(oi => oi.ProductId);
-
-
-            modelBuilder.Entity<Wishlist>(wl => wl.HasKey(wl => new{wl.UserId, wl.ProductId}));  
-
-            modelBuilder.Entity<Wishlist>()
-                        .HasOne(wl => wl.User)
-                        .WithMany(us => us.Wishlist)
-                        .HasForeignKey(wl => wl.UserId);
-
-            modelBuilder.Entity<Wishlist>()
-                        .HasOne(wl => wl.Product)
-                        .WithMany(p => p.Wishlists)
-                        .HasForeignKey(wl => wl.ProductId);
+                        .WithMany(p => p.orderItems)
+                        .HasForeignKey(o => o.ProductId);
+  
 
         }
     }
