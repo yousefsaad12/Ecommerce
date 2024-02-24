@@ -15,16 +15,19 @@ namespace Api.Mappers
             {
                 
                 ProductName = orderItem.Product.Name,
-                Quantity = orderItem.Quantity
+                Quantity = orderItem.Quantity,
+                Price = orderItem.Product.Price * orderItem.Quantity,
+                category = orderItem.Product.Category.Name,
             };
         }
 
-        public static OrderItem ToOrderItem(this OrderItemAddDTO orderItem, Product product)
+        public static OrderItem ToOrderItem(this OrderItemAddDTO orderItem, int prodId, int orderId)
         {
             return new OrderItem ()
             {
-                ProductId = product.ProductId,
-                Quantity = orderItem.Quantity
+                ProductId = prodId,
+                Quantity = orderItem.Quantity,
+                OrderId = orderId
             };
         }
     }

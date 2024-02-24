@@ -16,7 +16,7 @@ namespace Api.Mappers
             {
                 OrderDT = order.OrderDT,
                 OrderId = order.OrderId,
-                orderItems = order.orderItems
+                orderItems = order.orderItems.Select(oi => oi.ToOrderItemResponseDTO())
             };
         }
 

@@ -56,7 +56,11 @@ namespace Api.Repositories
 
         public async Task<List<Order>> GetOrders()
         {
-            return await _context.Orders.Include(o => o.orderItems).ToListAsync();
+            return await _context.Orders
+                                 .Include(o => o.orderItems)
+                                 .ThenInclude(oi => oi.Product)
+                                 .ThenInclude(p => p.Category.Name)
+                                 .ToListAsync();
         }
 
         public decimal TotelOrderPrice(ICollection<OrderItem> orderItem)
