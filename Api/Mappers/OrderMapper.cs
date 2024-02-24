@@ -14,9 +14,11 @@ namespace Api.Mappers
         {
             return new OrderResponseDTO()
             {
+                UserName = order.User.UserName,
                 OrderDT = order.OrderDT,
                 OrderId = order.OrderId,
-                orderItems = order.orderItems.Select(oi => oi.ToOrderItemResponseDTO())
+                orderItems = order.orderItems.Select(oi => oi.ToOrderItemResponseDTO()),
+                TotalPrice = order.orderItems.Select(oi => oi.ToOrderItemResponseDTO()).Sum(oi => oi.Price)
             };
         }
 

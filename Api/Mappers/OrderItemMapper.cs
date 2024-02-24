@@ -17,7 +17,6 @@ namespace Api.Mappers
                 ProductName = orderItem.Product.Name,
                 Quantity = orderItem.Quantity,
                 Price = orderItem.Product.Price * orderItem.Quantity,
-                category = orderItem.Product.Category.Name,
             };
         }
 
