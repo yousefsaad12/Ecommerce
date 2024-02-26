@@ -34,7 +34,7 @@ namespace Api.Controllers
             string userName = User.GetUserName();
             AppUser ? user = await _userManager.FindByNameAsync(userName);
 
-            List<Order> orders = await _orderInterface.GetOrders(user.Id);
+            var orders = await _orderInterface.GetOrders(user.Id);
             var ordersResponse = orders.Select(o => o.ToOrderResponseDTO());
 
             return Ok(ordersResponse);
