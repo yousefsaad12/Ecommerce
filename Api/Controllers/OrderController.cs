@@ -42,7 +42,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("CreateOrder")] 
-        public async Task<IActionResult> CreateOrder(OrderItemAddDTO orderItemAddDTOs)
+        public async Task<IActionResult> CreateOrder([FromBody]List<OrderItemAddDTO> orderItemAddDTOs)
         {   
             var username = User.GetUserName();
             var user = await _userManager.FindByNameAsync(username);
@@ -52,12 +52,14 @@ namespace Api.Controllers
             if(order == null)
                 return BadRequest("Some Wrong happend");
 
-            var orderItem = await _orderItemInterface.CreateOrderItem(order.OrderId, orderItemAddDTOs);
+            
 
+           var orderItem = await _orderItemInterface.CreateOrderItem(order.OrderId, orderItemAddDTOs);
 
+           if(orderItem == null)
+                return NotFound("Some Product not found");
 
-
-            return Ok(order);
+            return Ok(order.ToOrderResponseDTO());
  
         }
 
