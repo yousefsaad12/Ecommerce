@@ -42,7 +42,7 @@ namespace Api.Controllers
         }
 
         [HttpPost("CreateOrder")] 
-        public async Task<IActionResult> CreateOrder([FromBody]List<OrderItemAddDTO> orderItemAddDTOs)
+        public async Task<IActionResult> CreateOrder([FromBody] List<OrderItemAddDTO> orderItemAddDTOs)
         {   
             var username = User.GetUserName();
             var user = await _userManager.FindByNameAsync(username);

@@ -20,7 +20,7 @@ namespace Api.Repositories
         public async Task<List<OrderItem>?> CreateOrderItem(int orderId, List<OrderItemAddDTO> orderItemAddDTOs)
         {   
 
-            List<OrderItem>orderItems = new List<OrderItem>();
+            List<OrderItem>orderItems = new List<OrderItem>(){};
 
             foreach(var orderIt in orderItemAddDTOs)
             {
@@ -38,8 +38,10 @@ namespace Api.Repositories
                 };
 
                 orderItems.Add(OrderItem);
-                await _context.OrderItems.AddAsync(OrderItem);
+                
             }
+
+            await _context.OrderItems.AddRangeAsync(orderItems);
                  
             await _context.SaveChangesAsync();
 
