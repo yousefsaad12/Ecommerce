@@ -10,7 +10,7 @@ namespace Api.Interfaces
     public interface IOrderInterface
     {
         Task<Order?> CreateOrder(string userId);
-        Task<Order?> DeleteOrder(int orderId);
+        Task<bool?> DeleteOrder(int orderId);
         Task<Order?> GetOrder(int orderId);
         Task<List<Order>> GetOrders(string userId);
         Task<Order?> UpdateOrder(OrderItem orderItemUpdeted, int prodId, int orderId);

@@ -36,7 +36,7 @@ namespace Api.Repositories
             return order;
         }
 
-        public async Task<Order?> DeleteOrder(int orderId)
+        public async Task<bool?> DeleteOrder(int orderId)
         {
             Order ? order = await GetOrder(orderId);
 
@@ -46,7 +46,7 @@ namespace Api.Repositories
             _context.Remove(order);
             await _context.SaveChangesAsync();
 
-            return order;
+            return true;
         }
 
         public async Task<Order?>  GetOrder(int orderId)

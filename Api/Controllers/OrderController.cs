@@ -52,8 +52,6 @@ namespace Api.Controllers
             if(order == null)
                 return BadRequest("Some Wrong happend");
 
-            
-
            var orderItem = await _orderItemInterface.CreateOrderItem(order.OrderId, orderItemAddDTOs);
 
            if(orderItem == null)
@@ -61,6 +59,16 @@ namespace Api.Controllers
 
             return Ok(order.ToOrderResponseDTO());
  
+        }
+
+        [HttpDelete("DeleteOrder")]
+        public async Task<IActionResult>DeleteOrder([FromQuery] int orderId)
+        {
+            bool ? result = await _orderInterface.DeleteOrder(orderId);
+
+            if(result == null) return NotFound("No order found with this Id");
+
+            return Ok("Order has been deleted");
         }
 
 
