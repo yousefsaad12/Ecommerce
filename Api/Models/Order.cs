@@ -19,7 +19,6 @@ namespace EcommerceApi.Models
         public string UserId { get; set; }
         public User User { get; set; }
 
-        public decimal TotalPrice { get; set; }
         public ICollection<OrderItem> orderItems { get; set; }
 
     }

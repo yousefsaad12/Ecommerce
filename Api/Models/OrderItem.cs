@@ -9,6 +9,7 @@ namespace EcommerceApi.Models
 {
     public class OrderItem
     {
+        [Range(1, 5000,ErrorMessage =("Quantity must between 1 to 5000"))]
         public int Quantity { get; set; }
         public int ProductId { get; set; }
         public Product Product { get; set; }

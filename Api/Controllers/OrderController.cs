@@ -44,6 +44,7 @@ namespace Api.Controllers
         [HttpPost("CreateOrder")] 
         public async Task<IActionResult> CreateOrder([FromBody] List<OrderItemAddDTO> orderItemAddDTOs)
         {   
+            
             var username = User.GetUserName();
             var user = await _userManager.FindByNameAsync(username);
 
@@ -71,7 +72,7 @@ namespace Api.Controllers
             return Ok("Order has been deleted");
         }
 
-        [HttpPost("UpdateOrder")]
+        [HttpPut("UpdateOrder")]
         public async Task<IActionResult>UpdateOrder([FromQuery] int orderId, [FromQuery] int prodId, [FromBody] int Quantity)
         {
 

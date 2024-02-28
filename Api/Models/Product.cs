@@ -20,10 +20,9 @@ namespace EcommerceApi.Models
         [Column(TypeName ="varchar(300)")]
         public string ? Description { get; set; }
 
-        
+        [Column(TypeName ="decimal(10, 3)")]
         public Decimal Price { get; set; }
-
-        
+        [Range(1, 5000000,ErrorMessage =("Quantity must between 1 to 5000000"))]
         public int StockQuantity { get; set; }
        
         public int CategoryId { get; set; }
