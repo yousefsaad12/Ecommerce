@@ -75,5 +75,11 @@ namespace Api.Repositories
 
             return await _context.SaveChangesAsync() > 0 ? true : false;
         }
+
+        public async Task<bool> UpdateProductQuantity(Product product)
+        {
+            _context.Products.Update(product);
+           return await _context.SaveChangesAsync() > 0 ? true : false; 
+        }
     }
 }

@@ -15,6 +15,8 @@ namespace Api.Interfaces
         public Task<bool> UpdateProduct(Product prod, int prodId);
         public Task<bool> DeleteProduct(int prodId);
         public Task<ICollection<Product>> GetProductsWithIds(ICollection<OrderItemAddDTO> orderItems);
+
+        public Task<bool>UpdateProductQuantity(Product product);
         
     }
 }
