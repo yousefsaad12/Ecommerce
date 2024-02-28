@@ -71,6 +71,22 @@ namespace Api.Controllers
             return Ok("Order has been deleted");
         }
 
+        [HttpPost("UpdateOrder")]
+        public async Task<IActionResult>UpdateOrder([FromQuery] int orderId, [FromQuery] int prodId, [FromBody] int Quantity)
+        {
+
+            var order = await _orderInterface.GetOrder(orderId);
+
+            if(order == null)
+                return NotFound("Order Not found");
+
+            var orderitem = await _orderItemInterface.UpdateOrderItem(orderId, prodId, Quantity);
+
+            if(orderitem == null) return NotFound("Product Not found");
+
+            return Ok(orderitem.ToOrderItemResponseDTO());
+        }
+
 
 
     }

@@ -53,5 +53,30 @@ namespace Api.Repositories
 
             return orderItems;
         }
+
+        public async Task<OrderItem?> UpdateOrderItem(int orderId, int prodId, int Quantity)
+        {
+            Product ? product = await _productInterface.GetProductById(prodId);
+
+            if(product == null) return null;
+
+            OrderItem orderItem = await _context.OrderItems.FirstOrDefaultAsync(oi => oi.OrderId == orderId && oi.ProductId == prodId);
+
+            if(orderItem.Quantity > Quantity)
+                product.StockQuantity += (orderItem.Quantity - Quantity);
+
+            else if(orderItem.Quantity < Quantity)
+                 product.StockQuantity -= Quantity;
+
+            orderItem.Quantity = Quantity;
+
+            await _productInterface.UpdateProductQuantity(product);
+            _context.OrderItems.Update(orderItem);
+
+            await _context.SaveChangesAsync();
+
+            return orderItem;
+
+        }
     }
 }
