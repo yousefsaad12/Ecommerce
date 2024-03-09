@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.Dtos.UserDTOS;
 using Api.Interfaces;
+using Api.Mappers;
 using Api.Models;
 using Api.Roles;
 using EcommerceApi.Models;
@@ -31,13 +32,15 @@ namespace Api.Controllers
             _tokenInterface = tokenInterface;
             _userInterface = userInterface;
         }
-
+        
+        [AllowAnonymous]
         [HttpGet("GetUsers")]
         public async Task<IActionResult> GetAllUsers()
         {   
             List<User> users = await _userInterface.GetUsers();
+            var usersResponse = users.Select(u => u.ToUserResponse());
             
-            return Ok(users);
+            return Ok(usersResponse);
         }
 
         [AllowAnonymous]
