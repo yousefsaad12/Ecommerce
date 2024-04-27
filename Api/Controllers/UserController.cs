@@ -79,7 +79,7 @@ namespace Api.Controllers
                                 UserName = user.UserName,
                                 Email = user.Email,
                                 Address = user.Address,
-                                Token = _tokenInterface.GenerateJwtToke(user),
+                                Token = _tokenInterface.GenerateJwtToke(user, StaticAppUserRoles.USER),
                             }
                         );
                     }
@@ -123,7 +123,7 @@ namespace Api.Controllers
                     Email = user.Email,
                     Address = user.Address,
                     PhoneNumber = user.PhoneNumber,
-                    Token = _tokenInterface.GenerateJwtToke(user)
+                    Token = _tokenInterface.GenerateJwtToke(user, StaticAppUserRoles.USER)
                     
                 }
             );

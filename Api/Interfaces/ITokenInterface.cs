@@ -9,6 +9,6 @@ namespace Api.Interfaces
 {
     public interface ITokenInterface
     {
-        public string GenerateJwtToke(AppUser appUser);
+        public string GenerateJwtToke(AppUser appUser, string role);
     }
 }
