@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Api.Dtos;
 using Api.Dtos.ProductDTOS;
+using Api.Helper;
 using Api.Interfaces;
 using Api.Mappers;
 using Api.Roles;
@@ -15,7 +16,7 @@ using Microsoft.Extensions.Logging;
 
 namespace Apis.Controllers
 {   
-    [Authorize(Roles = StaticAppUserRoles.USER)]
+    
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {
@@ -30,9 +31,9 @@ namespace Apis.Controllers
 
         [HttpGet]
         [Route("GetProducts")]
-        public async Task<IActionResult>GetAllProducts()
+        public async Task<IActionResult>GetAllProducts([FromQuery] QueryObject queryObject)
         {
-            List<Product> allProducts = await _productInterface.GetAllProducts();
+            List<Product> allProducts = await _productInterface.GetAllProducts(queryObject);
 
             var products = allProducts.Select(p => p.ToProductResponseDTO());
             
@@ -63,7 +64,7 @@ namespace Apis.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var products = await _productInterface.GetAllProducts();
+            var products = await _productInterface.GetAllProducts(null);
 
             var exist = products.Where(p => p.Name.Trim().ToUpper() == productCreate.Name.Trim().ToUpper())
                                 .FirstOrDefault();
@@ -97,7 +98,7 @@ namespace Apis.Controllers
             if(!ModelState.IsValid)
                 return BadRequest();
 
-            var products = await _productInterface.GetAllProducts();
+            var products = await _productInterface.GetAllProducts(null);
 
             var exist = products.Where(p => p.Name.Trim().ToUpper() == productUpdate.Name.Trim().ToUpper())
                                 .FirstOrDefault();

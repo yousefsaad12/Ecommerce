@@ -15,6 +15,6 @@ namespace Api.Dtos
         public Decimal Price { get; set; }
         public int StockQuantity { get; set; }
 
-        public int CategoryId{ get; set; }
+        public string CategoryName{ get; set; }
     }
 }

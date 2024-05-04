@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Api.Dtos.OrderItemDTO;
+using Api.Helper;
 using Api.Interfaces;
 using EcommerceApi.Data;
 using EcommerceApi.Models;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Repositories
 {
@@ -50,14 +52,35 @@ namespace Api.Repositories
             return await _context.SaveChangesAsync() > 0 ? true : false;
         }
 
-        public async Task<List<Product>> GetAllProducts()
+        public async Task<List<Product>> GetAllProducts(QueryObject ? queryObject)
         {
-            return await _context.Products.ToListAsync();
+            var Products =  _context.Products
+                                    .Include(c => c.Category)
+                                    .Include(c => c.Category)
+                                    .AsQueryable();
+
+            if(!string.IsNullOrWhiteSpace(queryObject.ProductName))
+                Products = Products.Where(p => p.Name.Contains(queryObject.ProductName));
+
+            if(!string.IsNullOrWhiteSpace(queryObject.ProductName))
+                Products = Products.Where(p => p.Name.Contains(queryObject.ProductName));
+
+            if(!string.IsNullOrWhiteSpace(queryObject.SortBy))
+            {
+                if(queryObject.SortBy.Equals("price", StringComparison.OrdinalIgnoreCase))
+                    Products = queryObject.IsDecsending ? Products.OrderByDescending(p => p.Price) : Products.OrderBy(p => p.Price);
+            }
+
+            var skipPages = (queryObject.PageNumber - 1) * queryObject.PageSize;
+
+            return await Products.Skip(skipPages).Take(queryObject.PageSize).ToListAsync();
         }
 
         public async Task<Product?> GetProductById(int prodId)
         {
-            return await _context.Products.FirstOrDefaultAsync(p => p.ProductId == prodId);
+            return await _context.Products
+                                 .Include(p => p.Category)
+                                 .FirstOrDefaultAsync(p => p.ProductId == prodId);
         }
 
         public async Task<bool> UpdateProduct(Product prod, int prodId)

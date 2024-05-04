@@ -19,7 +19,7 @@ namespace Api.Mappers
                 Description = prod.Description,
                 Price = prod.Price,
                 StockQuantity = prod.StockQuantity,
-                CategoryId = prod.CategoryId
+                CategoryName = prod.Category.Name,
             };
         }
 
