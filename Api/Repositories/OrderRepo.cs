@@ -38,7 +38,7 @@ namespace Api.Repositories
 
         public async Task<bool?> DeleteOrder(int orderId)
         {
-            Order ? order = await GetOrder(orderId);
+            Order ? order = await GetOrder(null , orderId);
 
             if(order == null)
                 return null;
@@ -49,9 +49,13 @@ namespace Api.Repositories
             return true;
         }
 
-        public async Task<Order?>  GetOrder(int orderId)
+        public async Task<Order?>  GetOrder(string ? userId, int orderId)
         {
-            return await _context.Orders.FirstOrDefaultAsync(o => o.OrderId == orderId);
+            return await _context.Orders
+                                .Where(o => o.UserId == userId)
+                                .Include(o => o.orderItems)
+                                .ThenInclude(oi => oi.Product)
+                                .FirstOrDefaultAsync(o => o.OrderId == orderId);
         }
 
         public async Task<List<Order>> GetOrders(string userId)
@@ -70,7 +74,7 @@ namespace Api.Repositories
 
         public async Task<Order?> UpdateOrder(OrderItem orderItemUpdeted, int prodId, int orderId)
         {
-            Order ? order = await GetOrder(orderId);
+            Order ? order = await GetOrder(null, orderId);
             OrderItem ? orderItem = order.orderItems.FirstOrDefault(o => o.ProductId == prodId);
 
             if(orderItem == null)

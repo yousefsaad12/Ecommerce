@@ -41,6 +41,18 @@ namespace Api.Controllers
             
         }
 
+        [HttpGet("GetOrder")]
+        public async Task<IActionResult> GetOrder([FromQuery] int orderId)
+        {
+            string userName = User.GetUserName();
+            AppUser ? user = await _userManager.FindByNameAsync(userName);
+
+            var order = await _orderInterface.GetOrder(user.Id, orderId);
+            
+            return Ok(order.ToOrderResponseDTO());
+            
+        }
+
         [HttpPost("CreateOrder")] 
         public async Task<IActionResult> CreateOrder([FromBody] List<OrderItemAddDTO> orderItemAddDTOs)
         {   
@@ -80,7 +92,7 @@ namespace Api.Controllers
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
             
-            var order = await _orderInterface.GetOrder(orderId);
+            var order = await _orderInterface.GetOrder(null ,orderId);
 
             if(order == null)
                 return NotFound("Order Not found");
