@@ -161,3 +161,4 @@ E:\e commerce\Api\bin\Debug\net7.0\Microsoft.Extensions.Identity.Stores.dll
 E:\e commerce\Api\bin\Debug\net7.0\Microsoft.Extensions.Options.dll
 E:\e commerce\Api\bin\Debug\net7.0\Newtonsoft.Json.dll
 E:\e commerce\Api\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
+E:\e commerce\Api\bin\Debug\net7.0\Stripe.net.dll

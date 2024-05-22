@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "uS5gtwpIDaFlAz7oR666ZRP1FZ+B0XJk/SLQN5gIXu7LJC57e1q7dOJQ8gxg4ZQrjIU5SRbHKWPg0aGEEyI4mw==",
+  "dgSpecHash": "9eNCD8PFt1EzAv1fX2V2YuYfQkMd/Pdn0QC2K+ImtM/xW6zOQ7EJf2H+ddVhJMhuJALBi19IiNFT4CCMwxAfSQ==",
   "success": true,
   "projectFilePath": "E:\\e commerce\\Api\\Apis.csproj",
   "expectedPackageFiles": [
@@ -54,6 +54,7 @@
     "C:\\Users\\Yousef\\.nuget\\packages\\mono.texttemplating\\2.2.1\\mono.texttemplating.2.2.1.nupkg.sha512",
     "C:\\Users\\Yousef\\.nuget\\packages\\newtonsoft.json\\13.0.1\\newtonsoft.json.13.0.1.nupkg.sha512",
     "C:\\Users\\Yousef\\.nuget\\packages\\newtonsoft.json.bson\\1.0.2\\newtonsoft.json.bson.1.0.2.nupkg.sha512",
+    "C:\\Users\\Yousef\\.nuget\\packages\\stripe.net\\44.7.0\\stripe.net.44.7.0.nupkg.sha512",
     "C:\\Users\\Yousef\\.nuget\\packages\\swashbuckle.aspnetcore\\6.5.0\\swashbuckle.aspnetcore.6.5.0.nupkg.sha512",
     "C:\\Users\\Yousef\\.nuget\\packages\\swashbuckle.aspnetcore.swagger\\6.5.0\\swashbuckle.aspnetcore.swagger.6.5.0.nupkg.sha512",
     "C:\\Users\\Yousef\\.nuget\\packages\\swashbuckle.aspnetcore.swaggergen\\6.5.0\\swashbuckle.aspnetcore.swaggergen.6.5.0.nupkg.sha512",
