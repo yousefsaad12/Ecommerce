@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api.Dtos.UserDTOS
+namespace Api.Core.Dtos.UserDTOS
 {
     public class UserRegisterModel
     {

@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace EcommerceApi.Models
+namespace Api.Core.Models
 {
     public class Category
     {

@@ -1,11 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos.OrderItemDTO;
-using EcommerceApi.Models;
+using Api.Core.Dtos.OrderItemDTO;
 
-namespace Api.Dtos.OrderDTOS
+namespace Api.Core.Dtos.OrderDTOS
 {
     public class OrderResponseDTO
     {

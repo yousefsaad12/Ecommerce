@@ -1,11 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using EcommerceApi.Models;
-using Microsoft.AspNetCore.Identity;
-
-namespace Api.Core
+namespace Api.Core.Models
 {
     public interface ITokenInterface
     {

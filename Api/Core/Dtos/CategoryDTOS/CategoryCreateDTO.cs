@@ -4,7 +4,7 @@ using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Api.Dtos.CategoryDTOS
+namespace Api.Core.Dtos.CategoryDTOS
 {
     public class CategoryCreateDTO
     {

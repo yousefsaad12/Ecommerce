@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos.UserDTOS;
-using Api.Models;
+using Api.Core.Dtos.UserDTOS;
+using Api.Core.Models;
 
 namespace Api.Mappers
 {

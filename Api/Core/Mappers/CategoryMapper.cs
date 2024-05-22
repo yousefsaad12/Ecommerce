@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos.CategoryDTOS;
-using EcommerceApi.Models;
+using Api.Core.Dtos.CategoryDTOS;
+using Api.Core.Models;
 
 namespace Api.Mappers
 {

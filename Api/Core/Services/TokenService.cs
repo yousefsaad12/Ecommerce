@@ -1,13 +1,7 @@
-using System;
-using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
 using System.Security.Claims;
 using System.Text;
-using System.Threading.Tasks;
-using Api.Interfaces;
-using EcommerceApi.Models;
-using Microsoft.AspNetCore.Identity;
+using Api.Core.Models;
 using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Services

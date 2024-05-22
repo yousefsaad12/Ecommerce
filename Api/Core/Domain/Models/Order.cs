@@ -1,12 +1,6 @@
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Models;
 
-namespace EcommerceApi.Models
+namespace Api.Core.Models
 {
     public class Order
     {

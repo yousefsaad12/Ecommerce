@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos.OrderItemDTO;
-using EcommerceApi.Models;
+using Api.Core.Dtos.OrderItemDTO;
+using Api.Core.Models;
 
 namespace Api.Interfaces
 {
