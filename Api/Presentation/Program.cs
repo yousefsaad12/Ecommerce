@@ -1,12 +1,10 @@
 using api.Interfaces;
 using api.Repository;
+using Api.Core.Models;
+using Api.Infrastructer.Data;
 using Api.Interfaces;
-using Api.Models;
 using Api.Repositories;
-using Api.Roles;
 using Api.Services;
-using EcommerceApi.Data;
-using EcommerceApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;

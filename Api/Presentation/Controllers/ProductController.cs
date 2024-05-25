@@ -1,22 +1,14 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos;
-using Api.Dtos.ProductDTOS;
-using Api.Helper;
+using Api.Core.Dtos;
+using Api.Core.Dtos.ProductDTOS;
+using Api.Core.Helper;
+using Api.Core.Models;
 using Api.Interfaces;
 using Api.Mappers;
-using Api.Roles;
-using EcommerceApi.Models;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Apis.Controllers
-{   
-    
+{
+
     [Route("api/[controller]")]
     public class ProductController : ControllerBase
     {

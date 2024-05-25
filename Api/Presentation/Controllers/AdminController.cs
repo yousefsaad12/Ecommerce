@@ -1,16 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos.AdminDTOS;
-using Api.Interfaces;
-using Api.Models;
+using Api.Core.Dtos.AdminDTOS;
+using Api.Core.Models;
 using Api.Roles;
-using EcommerceApi.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace Api.Controllers
 {

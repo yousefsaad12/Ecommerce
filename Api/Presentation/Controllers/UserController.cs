@@ -1,19 +1,12 @@
-using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos.UserDTOS;
+using Api.Core.Dtos.UserDTOS;
+using Api.Core.Models;
 using Api.Interfaces;
 using Api.Mappers;
-using Api.Models;
 using Api.Roles;
-using EcommerceApi.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Logging;
 
 namespace Api.Controllers
 {

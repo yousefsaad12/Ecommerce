@@ -1,12 +1,11 @@
-using Api.Dtos.OrderDTOS;
 using Api.Interfaces;
 using Api.Mappers;
-using EcommerceApi.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using Api.Dtos.OrderItemDTO;
 using api.Extenstions;
+using Api.Core.Models;
+using Api.Core.Dtos.OrderItemDTO;
 namespace Api.Controllers
 {
     [Authorize]

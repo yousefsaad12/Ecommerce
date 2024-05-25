@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Models;
-using EcommerceApi.Models;
+using Api.Core.Models;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace EcommerceApi.Data
+namespace Api.Infrastructer.Data
 {
     public class ApplicationDbContext : IdentityDbContext<AppUser, IdentityRole , string>
     {
