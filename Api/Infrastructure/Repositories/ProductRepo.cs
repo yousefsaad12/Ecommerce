@@ -1,14 +1,9 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos.OrderItemDTO;
-using Api.Helper;
-using Api.Interfaces;
-using EcommerceApi.Data;
-using EcommerceApi.Models;
+using Api.Core.Domain;
+using Api.Core.Dtos.OrderItemDTO;
+using Api.Core.Helper;
+using Api.Core.Models;
+using Api.Infrastructer.Data;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Repositories
 {

@@ -1,6 +1,6 @@
+using Api.Core.Domain;
 using Api.Core.Dtos.UserDTOS;
 using Api.Core.Models;
-using Api.Interfaces;
 using Api.Mappers;
 using Api.Roles;
 using Microsoft.AspNetCore.Authorization;

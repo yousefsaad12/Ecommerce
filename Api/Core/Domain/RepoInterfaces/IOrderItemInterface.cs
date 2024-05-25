@@ -1,7 +1,7 @@
 using Api.Core.Dtos.OrderItemDTO;
 using Api.Core.Models;
 
-namespace Api.Interfaces
+namespace Api.Core.Domain
 {
     public interface IOrderItemInterface
     {

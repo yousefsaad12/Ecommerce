@@ -1,4 +1,3 @@
-using Api.Interfaces;
 using Api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using api.Extenstions;
 using Api.Core.Models;
 using Api.Core.Dtos.OrderItemDTO;
+using Api.Core.Domain;
 namespace Api.Controllers
 {
     [Authorize]

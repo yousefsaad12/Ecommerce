@@ -1,8 +1,8 @@
+using Api.Core.Domain;
 using Api.Core.Dtos;
 using Api.Core.Dtos.ProductDTOS;
 using Api.Core.Helper;
 using Api.Core.Models;
-using Api.Interfaces;
 using Api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 

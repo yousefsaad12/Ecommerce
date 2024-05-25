@@ -1,6 +1,6 @@
 using Api.Core.Models;
 
-namespace Api.Interfaces
+namespace Api.Core.Domain
 {
     public interface IOrderInterface
     {

@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Api.Dtos.OrderItemDTO;
-using Api.Interfaces;
-using EcommerceApi.Data;
-using EcommerceApi.Models;
+using Api.Core.Dtos.OrderItemDTO;
+using Api.Core.Models;
+using Api.Infrastructer.Data;
 using Microsoft.EntityFrameworkCore;
+using Api.Core.Domain;
 
 namespace Api.Repositories
 {
@@ -54,6 +50,8 @@ namespace Api.Repositories
             return orderItems;
         }
 
+        
+
         public async Task<OrderItem?> UpdateOrderItem(int orderId, int prodId, int Quantity)
         {
             Product ? product = await _productInterface.GetProductById(prodId);
@@ -77,6 +75,11 @@ namespace Api.Repositories
 
             return orderItem;
 
+        }
+
+        Task<OrderItem?> IOrderItemInterface.UpdateOrderItem(int orderId, int orderItemId, int Quantity)
+        {
+            throw new NotImplementedException();
         }
     }
 }
