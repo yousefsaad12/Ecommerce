@@ -6,11 +6,11 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace Api.Services
 {
-    public class TokenService : ITokenInterface
+    public class JwtTokenService : ITokenInterface
     {
         private readonly IConfiguration _config;
         private readonly SymmetricSecurityKey _key;
-        public TokenService(IConfiguration config)
+        public JwtTokenService(IConfiguration config)
         {
             _config = config;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["JWT:SigningKey"]));

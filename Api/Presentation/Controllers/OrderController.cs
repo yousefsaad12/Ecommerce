@@ -15,14 +15,14 @@ namespace Api.Controllers
         private readonly IOrderInterface _orderInterface;
 
         private readonly IOrderItemInterface _orderItemInterface;
-        private readonly IProductInterface _productInterface;
+        
         private readonly UserManager<AppUser> _userManager;
 
-        public OrderController(IOrderInterface orderInterface, UserManager<AppUser> userManager, IProductInterface productInterface, IOrderItemInterface orderItemInterface)
+        public OrderController(IOrderInterface orderInterface, UserManager<AppUser> userManager, IOrderItemInterface orderItemInterface)
         {
             _orderInterface = orderInterface;
             _userManager = userManager;
-            _productInterface = productInterface;
+
             _orderItemInterface = orderItemInterface;
         }
 
