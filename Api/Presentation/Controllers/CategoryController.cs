@@ -61,14 +61,10 @@ namespace Apis.Controllers
           if(!ModelState.IsValid)
                return BadRequest("Name must be between 3 to 75 char");
 
-          var categories = await _categoryInterface.GetAllCategories();
 
-          var exist = categories.Where(c => c.Name.Trim().ToUpper() == categoryCreate.Name.Trim().ToUpper()).FirstOrDefault();
 
-          if(exist != null)
+          if(!await _categoryInterface.CategoryExist(categoryCreate.Name))
                return  BadRequest("Category is already exist");
-
-
 
           if(!await _categoryInterface.CreateCategory(categoryCreate.ToCategory()))
           {
@@ -87,14 +83,10 @@ namespace Apis.Controllers
        public async Task<IActionResult> UpdateCategory([FromQuery] int catId, [FromBody] CategoryCreateDTO categoryUpdate)
        {
            if(!ModelState.IsValid)
-               return BadRequest("Name must be between 3 to 75 char");
+                return BadRequest("Name must be between 3 to 75 char");
 
-          var categories = await _categoryInterface.GetAllCategories();
-
-          var exist = categories.Where(c => c.Name.Trim().ToUpper() == categoryUpdate.Name.Trim().ToUpper()).FirstOrDefault();
-
-          if(exist != null)
-               return BadRequest("Category is already exist");
+          if(!await _categoryInterface.CategoryExist(categoryUpdate.Name))
+                return  BadRequest("Category is already exist");
 
           if(!await _categoryInterface.UpdateCategory(categoryUpdate.ToCategory(), catId))
           {
@@ -113,7 +105,6 @@ namespace Apis.Controllers
           if(!await _categoryInterface.DeleteCategory(catId))
                return BadRequest("This category not exist");
 
-       
 
           return Ok("Category has been deleted");
           

@@ -11,7 +11,6 @@ namespace Api.Mappers
             return new CategoryResponseDTO()
             {
                 Name = cat.Name,
-                id = cat.CategoryId,
             };
         }
 

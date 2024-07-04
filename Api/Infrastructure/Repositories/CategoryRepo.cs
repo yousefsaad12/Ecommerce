@@ -58,5 +58,12 @@ namespace Api.Repositories
 
             return await _context.SaveChangesAsync() > 0 ? true : false;
         }
+
+        public async Task<bool>CategoryExist(string name)
+        {
+           var exist = await _context.Categories.FirstOrDefaultAsync(c => c.Name.Trim().ToUpper() == name.Trim().ToUpper());
+
+           return exist == null ? false : true;
+        }
     }
 }

@@ -8,6 +8,5 @@ namespace Api.Core.Models
        public string Address { get; set; }
 
        public List<Order> Orders { get; set; } = new List<Order>();
-       public List<Wishlist> Wishlist { get; set; } = new List<Wishlist>();
     }
 }

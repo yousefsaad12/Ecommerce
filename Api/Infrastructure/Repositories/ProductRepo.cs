@@ -4,6 +4,7 @@ using Api.Core.Helper;
 using Api.Core.Models;
 using Api.Infrastructer.Data;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Query.SqlExpressions;
 
 namespace Api.Repositories
 {
@@ -49,26 +50,41 @@ namespace Api.Repositories
 
         public async Task<List<Product>> GetAllProducts(QueryObject ? queryObject)
         {
-            var Products =  _context.Products
-                                    .Include(c => c.Category)
-                                    .Include(c => c.Category)
-                                    .AsQueryable();
+            var productsQuery = _context.Products
+                            .Include(p => p.Category)
+                            .AsNoTracking() 
+                            .AsQueryable();
 
-            if(!string.IsNullOrWhiteSpace(queryObject.ProductName))
-                Products = Products.Where(p => p.Name.Contains(queryObject.ProductName));
+            
+            if (!string.IsNullOrWhiteSpace(queryObject.ProductName))
+                productsQuery = productsQuery.Where(p => p.Name.Contains(queryObject.ProductName));
+            
 
-            if(!string.IsNullOrWhiteSpace(queryObject.ProductName))
-                Products = Products.Where(p => p.Name.Contains(queryObject.ProductName));
-
-            if(!string.IsNullOrWhiteSpace(queryObject.SortBy))
+            if (!string.IsNullOrWhiteSpace(queryObject.SortBy))
             {
-                if(queryObject.SortBy.Equals("price", StringComparison.OrdinalIgnoreCase))
-                    Products = queryObject.IsDecsending ? Products.OrderByDescending(p => p.Price) : Products.OrderBy(p => p.Price);
+                if (queryObject.SortBy.Equals("price", StringComparison.OrdinalIgnoreCase))
+                {
+                    productsQuery = queryObject.IsDecsending
+                        ? productsQuery.OrderByDescending(p => p.Price)
+                        : productsQuery.OrderBy(p => p.Price);
+                }
             }
 
+            
             var skipPages = (queryObject.PageNumber - 1) * queryObject.PageSize;
 
-            return await Products.Skip(skipPages).Take(queryObject.PageSize).ToListAsync();
+            
+            productsQuery = productsQuery.Skip(skipPages).Take(queryObject.PageSize);
+
+            return await productsQuery.ToListAsync();
+        }
+
+
+        public async Task<bool> ProductExist (string name)
+        {   
+            Product product = await _context.Products.FirstOrDefaultAsync(p => p.Name.Trim().ToUpper() == name.Trim().ToUpper());
+
+           return product == null ? false : true; 
         }
 
         public async Task<Product?> GetProductById(int prodId)
@@ -99,5 +115,6 @@ namespace Api.Repositories
             _context.Products.Update(product);
            return await _context.SaveChangesAsync() > 0 ? true : false; 
         }
+
     }
 }

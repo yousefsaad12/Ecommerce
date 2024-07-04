@@ -69,6 +69,7 @@ namespace Api.Repositories
             orderItem.Quantity = Quantity;
 
             await _productInterface.UpdateProductQuantity(product);
+
             _context.OrderItems.Update(orderItem);
 
             await _context.SaveChangesAsync();
@@ -77,9 +78,5 @@ namespace Api.Repositories
 
         }
 
-        Task<OrderItem?> IOrderItemInterface.UpdateOrderItem(int orderId, int orderItemId, int Quantity)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

@@ -1,6 +1,8 @@
 using api.Repository;
 using Api.Core.Domain;
 using Api.Core.Models;
+using Api.Core.Services;
+using Api.Core.ServicesInterfaces;
 using Api.Infrastructer.Data;
 using Api.Repositories;
 using Api.Services;
@@ -25,6 +27,7 @@ builder.Services.AddScoped<IProductInterface,ProductRepo>();
 builder.Services.AddScoped<IRolesInterface,RolesRepo>();
 builder.Services.AddScoped<ITokenInterface,JwtTokenService>();
 builder.Services.AddScoped<IUserInterface,UserRepo>();
+builder.Services.AddScoped<ICachingInterface,CacheService>();
 
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();

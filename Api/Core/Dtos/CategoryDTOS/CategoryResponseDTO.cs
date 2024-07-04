@@ -7,7 +7,6 @@ namespace Api.Core.Dtos.CategoryDTOS
 {
     public class CategoryResponseDTO
     {   
-         public int id { get; set; }
          public string Name { get; set; }
 
     }

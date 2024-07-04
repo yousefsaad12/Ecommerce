@@ -162,4 +162,11 @@ E:\e commerce\Api\bin\Debug\net7.0\Newtonsoft.Json.Bson.dll
 E:\e commerce\Api\bin\Debug\net7.0\Stripe.net.dll
 E:\e commerce\Api\bin\Debug\net7.0\Infrastructure\appsettings.Development.json
 E:\e commerce\Api\bin\Debug\net7.0\Infrastructure\appsettings.json
-E:\e commerce\Api\bin\Debug\net7.0\Presentation\appsettings.json
+E:\e commerce\Api\bin\Debug\net7.0\appsettings.json
+E:\e commerce\Api\bin\Debug\net7.0\Microsoft.Extensions.Caching.Abstractions.dll
+E:\e commerce\Api\bin\Debug\net7.0\Microsoft.Extensions.Caching.StackExchangeRedis.dll
+E:\e commerce\Api\bin\Debug\net7.0\Microsoft.Extensions.DependencyInjection.Abstractions.dll
+E:\e commerce\Api\bin\Debug\net7.0\Microsoft.Extensions.Logging.Abstractions.dll
+E:\e commerce\Api\bin\Debug\net7.0\Microsoft.Extensions.Primitives.dll
+E:\e commerce\Api\bin\Debug\net7.0\Pipelines.Sockets.Unofficial.dll
+E:\e commerce\Api\bin\Debug\net7.0\StackExchange.Redis.dll

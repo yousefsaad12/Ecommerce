@@ -1,8 +1,10 @@
+using System.Collections.Immutable;
 using Api.Core.Domain;
 using Api.Core.Dtos;
 using Api.Core.Dtos.ProductDTOS;
 using Api.Core.Helper;
 using Api.Core.Models;
+using Api.Core.ServicesInterfaces;
 using Api.Mappers;
 using Microsoft.AspNetCore.Mvc;
 
@@ -14,22 +16,36 @@ namespace Apis.Controllers
     {
         private readonly IProductInterface _productInterface;
         private readonly ICategoryInterface _categoryInterface;
-        public ProductController(IProductInterface productInterface,  ICategoryInterface categoryInterface)
+
+        private readonly ICachingInterface _cachingInterface;
+        public ProductController(IProductInterface productInterface, ICategoryInterface categoryInterface, ICachingInterface cachingInterface)
         {
             _productInterface = productInterface;
             _categoryInterface = categoryInterface;
+            _cachingInterface = cachingInterface;
         }
 
 
         [HttpGet]
         [Route("GetProducts")]
         public async Task<IActionResult>GetAllProducts([FromQuery] QueryObject queryObject)
-        {
-            List<Product> allProducts = await _productInterface.GetAllProducts(queryObject);
+        {   
+    
 
-            var products = allProducts.Select(p => p.ToProductResponseDTO());
+            var cacheData = _cachingInterface.GetData<IEnumerable<ProductResponseDTO>>("Products");
+
+
+            if (cacheData != null && cacheData.Count() > 0)
+               return Ok(cacheData);
+
+            IEnumerable<Product> products  = await _productInterface.GetAllProducts(queryObject);
+            cacheData = products.Select(p => p.ToProductResponseDTO());
+
+            var expiryTime = DateTimeOffset.Now.AddSeconds(30);
+
+            _cachingInterface.SetData<IEnumerable<ProductResponseDTO>>("Products", cacheData, expiryTime);
             
-            return Ok(products);
+            return Ok(products.Select(p => p.ToProductResponseDTO()));
             
         }
 
@@ -44,6 +60,7 @@ namespace Apis.Controllers
             
             return Ok(product.ToProductResponseDTO());
         }
+        
 
         [HttpPost]
         [Route("CreateProduct")]
@@ -55,13 +72,8 @@ namespace Apis.Controllers
 
             if(!ModelState.IsValid)
                 return BadRequest(ModelState);
-            
-            var products = await _productInterface.GetAllProducts(null);
 
-            var exist = products.Where(p => p.Name.Trim().ToUpper() == productCreate.Name.Trim().ToUpper())
-                                .FirstOrDefault();
-
-            if(exist != null)
+            if(await _productInterface.ProductExist(productCreate.Name) == true)
                 return BadRequest("This product already exist");
 
             var category = await _categoryInterface.GetCategoryById(categoryId);
@@ -76,8 +88,8 @@ namespace Apis.Controllers
                 ModelState.AddModelError("", "Something went wrong while saving");
                 return BadRequest(ModelState);
            }
-
-            return Ok(productCreate);
+            
+            return Ok(productCreated.ToProductResponseDTO());
         }
 
         [HttpPut]
@@ -90,13 +102,8 @@ namespace Apis.Controllers
             if(!ModelState.IsValid)
                 return BadRequest();
 
-            var products = await _productInterface.GetAllProducts(null);
-
-            var exist = products.Where(p => p.Name.Trim().ToUpper() == productUpdate.Name.Trim().ToUpper())
-                                .FirstOrDefault();
-
-            if(exist != null)
-                return BadRequest("This product already exist with this name");
+            if(await _productInterface.ProductExist(productUpdate.Name) == true)
+                return BadRequest("This product already exist");
 
             var category = await _categoryInterface.GetCategoryById(productUpdate.CategoryId);
 
@@ -127,6 +134,8 @@ namespace Apis.Controllers
                 ModelState.AddModelError("", "Something happen while deleting");
                 return BadRequest(ModelState);
             }
+
+            _cachingInterface.RemoveData($"Product{prodId}");
 
             return Ok("Product has been deleted");
         }

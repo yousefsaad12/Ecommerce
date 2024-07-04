@@ -12,7 +12,7 @@ namespace Api.Core.Domain
         public Task<bool> UpdateProduct(Product prod, int prodId);
         public Task<bool> DeleteProduct(int prodId);
         public Task<ICollection<Product>> GetProductsWithIds(ICollection<OrderItemAddDTO> orderItems);
-
+        public Task<bool> ProductExist (string name);
         public Task<bool>UpdateProductQuantity(Product product);
         
     }

@@ -21,6 +21,7 @@ namespace Api.Core.Models
         public int StockQuantity { get; set; }
        
         public int CategoryId { get; set; }
+
         public Category ? Category { get; set; }
 
          public ICollection<OrderItem> orderItems { get; set; }

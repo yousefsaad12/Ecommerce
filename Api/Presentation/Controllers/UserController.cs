@@ -73,6 +73,7 @@ namespace Api.Controllers
                                 Email = user.Email,
                                 Address = user.Address,
                                 Token = _tokenInterface.GenerateJwtToke(user, StaticAppUserRoles.USER),
+                                PhoneNumber = user.PhoneNumber,
                             }
                         );
                     }

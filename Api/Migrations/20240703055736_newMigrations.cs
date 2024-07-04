@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
-namespace Apis.Infrastructer.Migrations
+namespace Apis.Migrations
 {
     /// <inheritdoc />
-    public partial class Initail : Migration
+    public partial class newMigrations : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -212,7 +212,7 @@ namespace Apis.Infrastructer.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     Name = table.Column<string>(type: "varchar(100)", nullable: false),
                     Description = table.Column<string>(type: "varchar(300)", nullable: true),
-                    Price = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    Price = table.Column<decimal>(type: "decimal(10,3)", nullable: false),
                     StockQuantity = table.Column<int>(type: "int", nullable: false),
                     CategoryId = table.Column<int>(type: "int", nullable: false)
                 },
@@ -234,40 +234,13 @@ namespace Apis.Infrastructer.Migrations
                     OrderId = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     OrderDT = table.Column<DateTime>(type: "datetime", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false)
+                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Orders", x => x.OrderId);
                     table.ForeignKey(
                         name: "FK_Orders_User_UserId",
-                        column: x => x.UserId,
-                        principalTable: "User",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Wishlist",
-                columns: table => new
-                {
-                    WishlistId = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    ProductId = table.Column<int>(type: "int", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(450)", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Wishlist", x => x.WishlistId);
-                    table.ForeignKey(
-                        name: "FK_Wishlist_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "ProductId",
-                        onDelete: ReferentialAction.Cascade);
-                    table.ForeignKey(
-                        name: "FK_Wishlist_User_UserId",
                         column: x => x.UserId,
                         principalTable: "User",
                         principalColumn: "Id",
@@ -352,16 +325,6 @@ namespace Apis.Infrastructer.Migrations
                 name: "IX_Products_CategoryId",
                 table: "Products",
                 column: "CategoryId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Wishlist_ProductId",
-                table: "Wishlist",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Wishlist_UserId",
-                table: "Wishlist",
-                column: "UserId");
         }
 
         /// <inheritdoc />
@@ -387,9 +350,6 @@ namespace Apis.Infrastructer.Migrations
 
             migrationBuilder.DropTable(
                 name: "OrderItems");
-
-            migrationBuilder.DropTable(
-                name: "Wishlist");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");

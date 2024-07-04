@@ -10,5 +10,7 @@ namespace Api.Core.Domain
         public Task<bool> CreateCategory(Category cat);
         public Task<bool> UpdateCategory(Category cat, int catId);
         public Task<bool> DeleteCategory(int catId);
+
+        public Task<bool>CategoryExist(string name);
     }
 }

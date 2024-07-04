@@ -1,20 +1,13 @@
 using api.Extenstions;
 using Api.Core.Domain;
-using Api.Core.Domain.Models;
 using Api.Core.Models;
-using Microsoft.AspNetCore.Hosting.Server;
-using Microsoft.AspNetCore.Hosting.Server.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Stripe.Checkout;
 using Api.Mappers;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Authorization;
-using api.Extenstions;
-using Api.Core.Models;
-using Api.Core.Dtos.OrderItemDTO;
-using Api.Core.Domain;
+using Stripe;
+using Api.Core.Dtos.OrderDTOS;
+using Api.Core.Domain.Models;
 
 namespace Api.Presentation.Controllers
 {
@@ -22,121 +15,136 @@ namespace Api.Presentation.Controllers
     [Route("api/[controller]")]
     [Authorize]
     //[ApiExplorerSettings(IgnoreApi = true)]
-public class CheckoutController : ControllerBase
-{
-    private readonly IConfiguration _configuration;
-    private readonly IOrderInterface _orderInterface;
-    private readonly UserManager<AppUser> _userManager;
-
-    private static string s_wasmClientURL = string.Empty;
-
-        public CheckoutController(IConfiguration configuration, IOrderInterface orderInterface, UserManager<AppUser> userManager)
-        {
-            _configuration = configuration;
-            _orderInterface = orderInterface;
-            _userManager = userManager;
-        }
-
-        [HttpPost]
-    public async Task<ActionResult> CheckoutOrder([FromQuery] int orderId, [FromServices] IServiceProvider sp)
+    public class CheckoutController : ControllerBase
     {
-        var referer = Request.Headers.Referer;
-        s_wasmClientURL = referer[0];
+        private readonly IConfiguration _configuration;
+        private readonly IOrderInterface _orderInterface;
+        private readonly UserManager<AppUser> _userManager;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        // Build the URL to which the customer will be redirected after paying.
-        var server = sp.GetRequiredService<IServer>();
+        public CheckoutController(IConfiguration configuration, IOrderInterface orderInterface, UserManager<AppUser> userManager, IHttpContextAccessor httpContextAccessor)
+            {
+                _configuration = configuration;
+                _orderInterface = orderInterface;
+                _userManager = userManager;
+                StripeConfiguration.ApiKey = _configuration["Stripe:SecretKey"];
+                _httpContextAccessor = httpContextAccessor;
+            }
 
-        var serverAddressesFeature = server.Features.Get<IServerAddressesFeature>();
 
-        string? thisApiUrl = null;
-
+      [HttpPost("create-payment-intent")]
+    public async Task<IActionResult> CreatePaymentIntent([FromBody] CreatePaymentIntentRequest request)
+    {
         string userName = User.GetUserName();
         AppUser ? user = await _userManager.FindByNameAsync(userName);
+
+        Order order =  await _orderInterface.GetOrder(user.Id, request.OrderId);
+
+        if (order == null)
+            return BadRequest("Invalid Order ID");
         
-        Order ? order = await _orderInterface.GetOrder(user.Id, orderId);
+        OrderResponseDTO orderResponseDTO = order.ToOrderResponseDTO();
 
-        if (serverAddressesFeature is not null)
+        string clientIpAddress =  _httpContextAccessor.HttpContext.Connection.RemoteIpAddress?.ToString();
+
+
+         var customerOptions = new CustomerCreateOptions
         {
-            thisApiUrl = serverAddressesFeature.Addresses.FirstOrDefault();
-        }
-
-        if (thisApiUrl is not null)
-        {
-            var sessionId = await CheckOut(order, thisApiUrl);
-            var pubKey = _configuration["Stripe:PubKey"];
-
-            var checkoutOrderResponse = new CheckOutOrderResponse()
-            {
-                SessionId = sessionId,
-                PubKey = pubKey
-            };
-
-            return Ok(checkoutOrderResponse);
-        }
-        else
-        {
-            return StatusCode(500);
-        }
-    }
-
-    [NonAction]
-    public async Task<string> CheckOut(Order order, string thisApiUrl)
-    {
-        // Create a payment flow from the items in the cart.
-        // Gets sent to Stripe API.
-        var lineItems = new List<SessionLineItemOptions>();
-
-        foreach (var item in order.orderItems)
-        {
-            var product = item.Product; // Assuming orderItems contains Product reference or data
-            lineItems.Add(new SessionLineItemOptions
-            {
-                PriceData = new SessionLineItemPriceDataOptions
-                {
-                    UnitAmount = (long?)(item.Quantity * product.Price * 100), // Convert to cents if Price is in USD.
-                    Currency = "USD",
-                    ProductData = new SessionLineItemPriceDataProductDataOptions
-                    {
-                        Name = product.Name,
-                        Description = product.Description,
-                    }
-                },
-                Quantity = item.Quantity
-            });
-        }
-
-        var options = new SessionCreateOptions
-        {
-            // Stripe calls the URLs below when certain checkout events happen such as success and failure.
-            SuccessUrl = $"{thisApiUrl}/checkout/success?sessionId=" + "{CHECKOUT_SESSION_ID}", // Customer paid.
-            CancelUrl = s_wasmClientURL + "failed",  // Checkout cancelled.
-            PaymentMethodTypes = new List<string> // Only card available in test mode?
-            {
-                "card"
-            },
-            LineItems = lineItems,
-            Mode = "payment" // One-time payment. Stripe supports recurring 'subscription' payments.
+            Email = user.Email,         // User's email address
+            Name = user.UserName        // User's name
         };
 
-        var service = new SessionService();
-        var session = await service.CreateAsync(options);
+        var customerService = new CustomerService();
+        var customer = customerService.Create(customerOptions);
 
-        return session.Id;
-    }
+        var options = new PaymentIntentCreateOptions
+        {
+            Amount = (long?)orderResponseDTO.TotalPrice * 100,
+            Currency = request.Currency,
+            PaymentMethodTypes = new List<string> { "card" },
+            Customer = customer.Id,  
 
-    [HttpGet("success")]
-    // Automatic query parameter handling from ASP.NET.
-    // Example URL: https://localhost:7051/checkout/success?sessionId=si_123123123123
-    public ActionResult CheckoutSuccess(string sessionId)
+             Metadata = new Dictionary<string, string>
+            {
+                { "order_id", request.OrderId.ToString() },
+                { "user_name", userName },
+                { "IP_address", clientIpAddress },
+                { "Customer_email", user.Email },
+                { "Customer_name", user.UserName }
+            },
+
+            
+            ReceiptEmail = user.Email,
+            Description = $"Payment for order {request.OrderId} by {userName}",
+
+        };
+
+            var service = new PaymentIntentService();
+            var paymentIntent = await service.CreateAsync(options);
+
+        
+            var confirmOptions = new PaymentIntentConfirmOptions
+            {
+                PaymentMethod = "pm_card_visa", 
+            };
+
+            await service.ConfirmAsync(paymentIntent.Id, confirmOptions);
+
+            return Ok(new { PaymentId = paymentIntent.Id });
+
+     }
+
+     [HttpPost("confirm-payment")]
+    public async Task<IActionResult> ConfirmPayment([FromBody] ConfirmPaymentRequest request)
     {
-        var sessionService = new SessionService();
-        var session = sessionService.Get(sessionId);
+        try
+        {
+            // Retrieve PaymentIntent from Stripe using payment_intent_id
+            var service = new PaymentIntentService();
+            var paymentIntent = await service.GetAsync(request.PaymentIntentId);
 
-        // Here you can save order and customer details to your database.
-        var total = session.AmountTotal.Value;
-        var customerEmail = session.CustomerDetails.Email;
+            // Check if PaymentIntent exists and is successful
+            if (paymentIntent == null)
+            {
+                return BadRequest("Invalid PaymentIntent ID");
+            }
 
-        return Redirect(s_wasmClientURL + "success");
+            if (paymentIntent.Status != "succeeded")
+            {
+                return BadRequest("PaymentIntent has not been successfully processed");
+            }
+
+            // Retrieve order information from PaymentIntent metadata
+            int orderId;
+            if (!int.TryParse(paymentIntent.Metadata["order_id"], out orderId))
+            {
+                return BadRequest("Invalid order ID in PaymentIntent metadata");
+            }
+
+            // Retrieve order and mark it as completed (simulated)
+            // Replace with your actual order update logic
+            string userName = User.GetUserName();
+            AppUser ? user = await _userManager.FindByNameAsync(userName);
+
+            Order order = await _orderInterface.GetOrder(user.Id,orderId);
+
+            if (order == null)
+                return BadRequest("Order not found");
+        
+
+            // _orderInterface.UpdateOrder(order); // Uncomment and implement your order update logic
+
+            // Return success response
+            return Ok(new { Message = "Payment confirmed and order marked as completed" });
+        }
+        catch (Exception ex)
+        {
+            return StatusCode(500, $"Error confirming payment: {ex.Message}");
+        }
     }
-}
+
+
+
+    }
+
 }
